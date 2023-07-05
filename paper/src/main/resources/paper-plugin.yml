@@ -1,0 +1,8 @@
+name: "${pluginName}"
+version: ${pluginVersion}
+description: ${pluginDescription}
+api-version: "1.20"
+main: net.deltapvp.template.paper.Template
+loader: net.deltapvp.template.paper.TemplateLoader
+bootstrapper: net.deltapvp.template.paper.TemplateBootstrap
+author: ${pluginAuthor}
