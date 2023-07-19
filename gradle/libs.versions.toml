@@ -41,6 +41,7 @@ shadow = { module = "com.github.johnrengelman:shadow", version.ref = "shadow" }
 run-task = { module = "xyz.jpenilla:run-task", version.ref = "run-task" }
 blossom = { module = "net.kyori:blossom", version.ref = "blossom" }
 paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version.ref = "paperweight" }
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }

@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.shadow)
     implementation(libs.paperweight)
     implementation(libs.run.task)
+        implementation(libs.kotlin.gradle)
 }
 
 java {

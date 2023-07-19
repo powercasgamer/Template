@@ -1,12 +1,11 @@
 import net.kyori.indra.git.IndraGitExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.attributes
-import org.gradle.kotlin.dsl.findByType
-import org.gradle.kotlin.dsl.named
+import org.gradle.kotlin.dsl.*
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
-import org.gradle.kotlin.dsl.the
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,10 +41,49 @@ fun Project.applyJarMetadata(moduleName: String) {
                 "Automatic-Module-Name" to moduleName,
                 "Specification-Title" to moduleName,
                 "Specification-Version" to project.versionString(),
-                "Specification-Vendor" to providers.gradleProperty("projectAuthor").getOrElse("Template"),
+                "Specification-Vendor" to providers.gradleProperty("projectAuthor").getOrElse("athena"),
             )
             val indraGit = project.extensions.findByType<IndraGitExtension>()
-            indraGit?.applyVcsInformationToManifest(manifest)
+            indraGit?.apply {
+                applyVcsInformationToManifest(manifest)
+
+                if (isPresent) {
+                }
+            }
         }
     }
+}
+
+fun ExternalModuleDependency.excludeUseless() {
+    exclude(group = "org.jetbrains", module = "annotations")
+    exclude(group = "org.checkerframework", module = "checker-qual")
+    exclude(group = "com.google.errorprone", module = "error_prone_core")
+    exclude(group = "com.google.errorprone", module = "error_prone_annotations")
+    exclude(group = "com.google.errorprone", module = "error_prone_annotation")
+    exclude(group = "com.google.code.findbugs", module = "jsr305")
+    exclude(group = "com.google.j2objc", module = "j2objc-annotations")
+}
+
+fun Configuration.excludeUseless() {
+    exclude(group = "org.jetbrains", module = "annotations")
+    exclude(group = "org.checkerframework", module = "checker-qual")
+    exclude(group = "com.google.errorprone", module = "error_prone_core")
+    exclude(group = "com.google.errorprone", module = "error_prone_annotations")
+    exclude(group = "com.google.errorprone", module = "error_prone_annotation")
+    exclude(group = "com.google.code.findbugs", module = "jsr305")
+    exclude(group = "com.google.j2objc", module = "j2objc-annotations")
+}
+
+/**
+ * Returns `true` if a substring of this char sequence starting at the specified offset [startIndex] starts with any of the specified prefixes.
+ */
+fun CharSequence.startsWithAny(vararg prefixes: CharSequence, startIndex: Int = 0, ignoreCase: Boolean = false): Boolean {
+    return prefixes.any { this.startsWith(it, startIndex, ignoreCase) }
+}
+
+/**
+ * Returns `true` if this char sequence ends with any of the specified suffixes.
+ */
+fun CharSequence.endsWithAny(vararg suffixes: CharSequence, ignoreCase: Boolean = false): Boolean {
+    return suffixes.any { this.endsWith(it, ignoreCase) }
 }

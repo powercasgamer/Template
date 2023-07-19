@@ -1,7 +1,7 @@
 plugins {
+    id("template.common-conventions")
     id("xyz.jpenilla.run-velocity")
 //    id("net.kyori.blossom") // Doesn't support gradle 8.2 yet (awaiting release)
-    id("template.common-conventions")
 }
 
 tasks {
@@ -11,7 +11,7 @@ tasks {
         systemProperty("terminal.ansi", true)
     }
 
-   named("clean", Delete::class) {
-       delete(project.projectDir.resolve("run"))
-   }
+//   named("clean", Delete::class) {
+//       delete(project.projectDir.resolve("run"))
+//   }
 }

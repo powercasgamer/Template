@@ -1,11 +1,15 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.papermc.paperweight.tasks.RemapJar
+
 plugins {
-    id("xyz.jpenilla.run-paper")
     id("template.common-conventions")
+    id("io.papermc.paperweight.userdev")
+    id("xyz.jpenilla.run-paper")
 }
 
 tasks {
     runServer {
-        minecraftVersion("1.20.1")
+        minecraftVersion(Constants.MINECRAFT_VERSION)
 
         jvmArguments.add("-Dcom.mojang.eula.agree=true")
         systemProperty("terminal.jline", false)
@@ -16,9 +20,15 @@ tasks {
        delete(project.projectDir.resolve("run"))
    }
 
-    if (plugins.hasPlugin("io.papermc.paperweight.userdev")) {
-        named("assemble") {
-            dependsOn(named("reobfJar"))
-        }
+    assemble {
+        dependsOn(reobfJar)
     }
+
+    reobfJar {
+        outputJar.set(layout.buildDirectory.file("libs/${project.nameString()}-${project.versionString()}.jar"))
+    }
+}
+
+configurations.paperweightDevelopmentBundle {
+    resolutionStrategy.cacheChangingModulesFor(3, "days")
 }

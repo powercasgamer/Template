@@ -7,7 +7,7 @@ dependencies {
     api(projects.templateCommon)
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
-    compileOnly(libs.bstats.velocity)
+    api(libs.bstats.velocity)
 }
 
 applyJarMetadata("net.deltapvp.template.velocity")

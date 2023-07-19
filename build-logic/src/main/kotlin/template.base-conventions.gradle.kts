@@ -1,6 +1,8 @@
 plugins {
     id("net.kyori.indra.publishing")
     id("idea")
+    id("eclipse")
+    id("visual-studio")
 }
 
 val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
@@ -8,6 +10,13 @@ val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
 group = rootProject.group
 version = rootProject.version
 description = rootProject.description
+
+repositories {
+    mavenCentral()
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://maven.deltapvp.net/")
+    maven("https://repo.deltapvp.net/")
+}
 
 indra {
     gpl3OnlyLicense()
@@ -21,11 +30,11 @@ indra {
         pom {
             developers {
                 developer {
-                    id = "powercas_gamer"
-                    name = "Cas"
-                    url = "https://deltapvp.net"
-                    email = "cas@deltapvp.net"
-                    timezone = "Europe/Amsterdam"
+                    id.set("powercas_gamer")
+                    name.set("Cas")
+                    url.set("https://deltapvp.net")
+                    email.set("cas@deltapvp.net")
+                    timezone.set("Europe/Amsterdam")
                 }
             }
         }
@@ -35,6 +44,9 @@ indra {
 tasks {
     named("idea") {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
+    }
+    register("cleanAll", Delete::class) {
+        dependsOn("clean", "cleanIdea", "cleanVisualStudio", "cleanEclipse")
     }
 }
 

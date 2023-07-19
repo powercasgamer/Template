@@ -69,18 +69,18 @@ indraSpotlessLicenser {
     val createdYear = providers.gradleProperty("createdYear").map { it.toInt() }.getOrElse(currentYear)
     val year = if (createdYear == currentYear) createdYear.toString() else "$createdYear-$currentYear"
 
-    property("name", providers.gradleProperty("projectName").getOrElse("Template"))
+    property("name", providers.gradleProperty("projectName").getOrElse("athena"))
     property("year", year)
-    property("description", project.description ?: "A template project")
-    property("author", providers.gradleProperty("projectAuthor").getOrElse("Template"))
+    property("description", project.description ?: "A athena project")
+    property("author", providers.gradleProperty("projectAuthor").getOrElse("athena"))
 
 }
 
-val PROJECT_PREFIX = "${providers.gradleProperty("projectName").getOrElse("Template").lowercase()}-"
+val PROJECT_PREFIX = "${providers.gradleProperty("projectName").getOrElse("athena").lowercase()}-"
 indraCrossdoc {
     baseUrl().set(providers.gradleProperty("javadocPublishRoot"))
     nameBasedDocumentationUrlProvider {
-        projectNamePrefix = PROJECT_PREFIX
+        projectNamePrefix.set(PROJECT_PREFIX)
     }
 }
 
@@ -91,16 +91,31 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        relocationPrefix = "net.deltapvp.template.libs"
-        isEnableRelocation = true
+        relocationPrefix = "org.mineorbit.athena.libs"
+        isEnableRelocation = false
         // or
-        if (!isEnableRelocation) setOf("something", "other").forEach {
+        if (!isEnableRelocation) setOf(
+            "your-mother"
+        ).forEach {
             relocate(it, this.relocationPrefix + "." + it)
         }
+
+        dependencies {
+            exclude(dependency("org.jetbrains:annotations:.*"))
+            exclude(dependency("org.checkerframework:checker-qual:.*"))
+            exclude(dependency("com.google.errorprone:error_prone_core:.*"))
+            exclude(dependency("com.google.errorprone:error_prone_annotations:.*"))
+            exclude(dependency("com.google.errorprone:error_prone_annotation:.*"))
+            exclude(dependency("com.google.code.findbugs:jsr305:.*"))
+            exclude(dependency("com.google.j2objc:j2objc-annotations:.*"))
+            exclude("org/jetbrains/annotations/*")
+            exclude("org/intellij/lang/annotations/*")
+        }
+
         mergeServiceFiles()
 
         from(rootProject.projectDir.resolve("LICENSE")) {
-            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("Template")}" }
+            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("athena")}" }
         }
         archiveBaseName.set(project.nameString())
         transform(Log4j2PluginsCacheFileTransformer::class.java)
@@ -111,10 +126,14 @@ tasks {
         archiveBaseName.set(project.nameString())
     }
 
-    sequenceOf(javadocJar, sourcesJar).forEach {
-        it.configure {
-            archiveBaseName.set(project.nameString())
-        }
+    sourcesJar {
+        archiveClassifier.set("sources")
+        archiveBaseName.set(project.nameString())
+    }
+
+    javadocJar {
+        archiveClassifier.set("javadoc")
+        archiveBaseName.set(project.nameString())
     }
 
     withType<JavaCompile>().configureEach {
@@ -131,9 +150,9 @@ tasks {
 
         val praps = mapOf(
             "pluginVersion" to project.versionString(),
-            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("Template"),
-            "pluginName" to providers.gradleProperty("projectName").getOrElse("Template"),
-            "pluginDescription" to (project.description ?: "A template project")
+            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("athena"),
+            "pluginName" to providers.gradleProperty("projectName").getOrElse("athena"),
+            "pluginDescription" to (project.description ?: "A athena project")
         )
 
         filesMatching(setOf("paper-plugin.yml", "plugin.yml", "velocity-plugin.json")) {
@@ -142,7 +161,7 @@ tasks {
     }
 
     if (providers.gradleProperty("disableJavadoc").map { it.toBoolean() }.getOrElse(false)) {
-        sequenceOf(javadocJar, javadoc).forEach {
+        sequenceOf(javadocJar, javadoc, sourcesJar).forEach {
             it.configure {
                 onlyIf { false }
             }
@@ -167,5 +186,11 @@ tasks {
             options.charSet = "UTF-8"
             options.linkSource(true)
         }
+    }
+}
+
+configurations {
+    getting {
+        excludeUseless()
     }
 }
