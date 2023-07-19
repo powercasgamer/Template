@@ -69,14 +69,14 @@ indraSpotlessLicenser {
     val createdYear = providers.gradleProperty("createdYear").map { it.toInt() }.getOrElse(currentYear)
     val year = if (createdYear == currentYear) createdYear.toString() else "$createdYear-$currentYear"
 
-    property("name", providers.gradleProperty("projectName").getOrElse("athena"))
+    property("name", providers.gradleProperty("projectName").getOrElse("template"))
     property("year", year)
-    property("description", project.description ?: "A athena project")
-    property("author", providers.gradleProperty("projectAuthor").getOrElse("athena"))
+    property("description", project.description ?: "A template project")
+    property("author", providers.gradleProperty("projectAuthor").getOrElse("template"))
 
 }
 
-val PROJECT_PREFIX = "${providers.gradleProperty("projectName").getOrElse("athena").lowercase()}-"
+val PROJECT_PREFIX = "${providers.gradleProperty("projectName").getOrElse("template").lowercase()}-"
 indraCrossdoc {
     baseUrl().set(providers.gradleProperty("javadocPublishRoot"))
     nameBasedDocumentationUrlProvider {
@@ -91,11 +91,11 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        relocationPrefix = "org.mineorbit.athena.libs"
+        relocationPrefix = "net.deltapvp.template.libs"
         isEnableRelocation = false
         // or
         if (!isEnableRelocation) setOf(
-            "your-mother"
+            "stuff-to-relocate-here"
         ).forEach {
             relocate(it, this.relocationPrefix + "." + it)
         }
@@ -115,7 +115,7 @@ tasks {
         mergeServiceFiles()
 
         from(rootProject.projectDir.resolve("LICENSE")) {
-            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("athena")}" }
+            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("template")}" }
         }
         archiveBaseName.set(project.nameString())
         transform(Log4j2PluginsCacheFileTransformer::class.java)
@@ -150,9 +150,9 @@ tasks {
 
         val praps = mapOf(
             "pluginVersion" to project.versionString(),
-            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("athena"),
-            "pluginName" to providers.gradleProperty("projectName").getOrElse("athena"),
-            "pluginDescription" to (project.description ?: "A athena project")
+            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("template"),
+            "pluginName" to providers.gradleProperty("projectName").getOrElse("template"),
+            "pluginDescription" to (project.description ?: "A template project")
         )
 
         filesMatching(setOf("paper-plugin.yml", "plugin.yml", "velocity-plugin.json")) {
