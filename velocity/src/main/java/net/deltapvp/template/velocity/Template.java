@@ -34,13 +34,14 @@ import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.Locale;
 
 @Plugin(
-        id = "template",
-        name = "@projectName@",
-        version = "1.0.0",
-        description = "@projectDescription@",
-        authors = "@projectAuthor@"
+        id = ProjectData.ID,
+        name = ProjectData.NAME,
+        version = ProjectData.VERSION,
+        description = ProjectData.DESCRIPTION,
+        authors = ProjectData.AUTHOR
 )
 public class Template {
 
@@ -50,7 +51,8 @@ public class Template {
     private final ProxyServer server;
     private final Logger logger;
     private final Path dataDirectory;
-    private final Metrics metrics;
+    private Metrics metrics;
+    private final Metrics.Factory metricsFactory;
 
     @Inject
     public Template(
@@ -61,11 +63,12 @@ public class Template {
         this.dataDirectory = dataDirectory;
         this.logger = logger;
         this.server = server;
-        this.metrics = metricsFactory.make(this, PLUGIN_ID);
+        this.metricsFactory = metricsFactory;
     }
 
     @Subscribe
     public void onProxyInitialization(final ProxyInitializeEvent event) {
+        this.metrics = this.metricsFactory.make(this, PLUGIN_ID);
     }
 
     @Subscribe

@@ -5,7 +5,7 @@ plugins {
 dependencies {
     compileOnly(files(libs::class.java.protectionDomain.codeSource.location))
     implementation(libs.minotaur)
-    implementation(libs.blossom)
+    implementation(libs.templating)
     implementation(libs.hangar.publish)
     implementation(libs.indra.common)
     implementation(libs.indra.git)
@@ -14,7 +14,7 @@ dependencies {
     implementation(libs.shadow)
     implementation(libs.paperweight)
     implementation(libs.run.task)
-        implementation(libs.kotlin.gradle)
+    implementation(libs.kotlin.gradle)
 }
 
 java {

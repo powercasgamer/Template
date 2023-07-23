@@ -8,9 +8,18 @@ import org.gradle.kotlin.dsl.*
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import java.text.SimpleDateFormat
 import java.util.*
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 val Project.libs: LibrariesForLibs
     get() = the()
+
+fun DependencyHandler.configurate(comp: String, version: Any? = null): String {
+    return "org.spongepowered:configurate-$comp${if (version == null) "" else ":$version"}"
+}
+
+fun DependencyHandler.adventure(component: String, version: Any? = null): String {
+    return "net.kyori:adventure-$component${if (version == null) "" else ":$version"}"
+}
 
 // Hangar has it like this but, Modrinth will want it lowercase
 fun Project.channel(): String {
@@ -48,6 +57,9 @@ fun Project.applyJarMetadata(moduleName: String) {
                 applyVcsInformationToManifest(manifest)
 
                 if (isPresent) {
+                    manifest.attributes(
+                        "Git-Tag" to (this.headTag()?.name ?: "unknown"),
+                    )
                 }
             }
         }

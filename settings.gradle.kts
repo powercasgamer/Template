@@ -35,7 +35,8 @@ sequenceOf(
     "bom",
     "common",
     "paper",
-    "velocity"
+    "velocity",
+    "extra-kotlin"
 ).forEach {
     include("template-$it")
     project(":template-$it").projectDir = file(it)

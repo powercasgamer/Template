@@ -15,6 +15,7 @@ dependencies {
             "common",
             "paper",
             "velocity",
+            "extra-kotlin"
         ).forEach {
             api(project(":template-$it"))
         }

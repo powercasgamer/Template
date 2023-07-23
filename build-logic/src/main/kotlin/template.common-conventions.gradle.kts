@@ -42,6 +42,8 @@ spotless {
         removeUnusedImports()
         formatAnnotations()
         applyCommon()
+        target("*/src/*/java/**/*.java")
+        target("*/src/*/templates/**/*.java")
     }
     kotlinGradle {
         applyCommon()
@@ -95,7 +97,7 @@ tasks {
         isEnableRelocation = false
         // or
         if (!isEnableRelocation) setOf(
-            "stuff-to-relocate-here"
+            "org.bstats"
         ).forEach {
             relocate(it, this.relocationPrefix + "." + it)
         }
@@ -112,11 +114,15 @@ tasks {
             exclude("org/intellij/lang/annotations/*")
         }
 
+        minimize {
+            include(dependency("space.vectrix.flare:flare:.*"))
+            include(dependency("space.vectrix.flare:flare-fastutil:.*"))
+            include(dependency("it.unimi.dsi:fastutil-core:.*"))
+            include(dependency("it.unimi.dsi:fastutil:.*"))
+        }
+
         mergeServiceFiles()
 
-        from(rootProject.projectDir.resolve("LICENSE")) {
-            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("template")}" }
-        }
         archiveBaseName.set(project.nameString())
         transform(Log4j2PluginsCacheFileTransformer::class.java)
     }
@@ -124,6 +130,9 @@ tasks {
     jar {
         archiveClassifier.set("unshaded")
         archiveBaseName.set(project.nameString())
+        from(rootProject.projectDir.resolve("LICENSE")) {
+            rename { "LICENSE_${providers.gradleProperty("projectName").getOrElse("template")}" }
+        }
     }
 
     sourcesJar {

@@ -1,7 +1,7 @@
 plugins {
     id("template.common-conventions")
     id("xyz.jpenilla.run-velocity")
-//    id("net.kyori.blossom") // Doesn't support gradle 8.2 yet (awaiting release)
+    id("ca.stellardrift.templating")
 }
 
 tasks {
@@ -11,7 +11,16 @@ tasks {
         systemProperty("terminal.ansi", true)
     }
 
-//   named("clean", Delete::class) {
-//       delete(project.projectDir.resolve("run"))
-//   }
+    generateTemplates {
+        properties(mapOf(
+            "pluginId" to providers.gradleProperty("projectName").getOrElse("template").lowercase(),
+            "pluginName" to providers.gradleProperty("projectName").getOrElse("template"),
+            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("template"),
+            "project" to project
+        ))
+    }
+
+   named("clean", Delete::class) {
+       delete(project.projectDir.resolve("run"))
+   }
 }
