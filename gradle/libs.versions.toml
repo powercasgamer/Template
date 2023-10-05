@@ -10,7 +10,7 @@ kotlin = "1.9.0"
 # build-logic stuff
 shadow = "8.1.1"
 run-task = "2.1.0"
-hangar-publish = "0.0.5"
+hangar-publish = "0.1.0"
 minotaur = "2.8.2"
 indra = "3.1.2"
 paperweight = "1.5.5"
