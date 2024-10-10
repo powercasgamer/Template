@@ -5,7 +5,7 @@ paper = "1.20.1-R0.1-SNAPSHOT"
 velocity = "3.2.0-SNAPSHOT"
 bstats = "3.0.2"
 papertrail = "0.0.1-SNAPSHOT"
-kotlin = "1.9.0"
+kotlin = "2.0.21"
 
 # build-logic stuff
 shadow = "8.1.1"
